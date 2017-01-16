@@ -1,0 +1,19 @@
+/**
+ * ZetaPush Official Test Recipe
+ */
+recipe com.zetapush.test 1.0.0;
+
+// Import recipes
+
+import recipe com.zetapush.test.common 1.0.0 in zpRecipeTestCommon;
+
+// Constants
+
+// Errors Codes
+
+// Services declaration
+
+/**
+ * Public API (Client and Server side) macro service
+ */
+service zpServiceApiMacro = macro(__default) for 'src/public';

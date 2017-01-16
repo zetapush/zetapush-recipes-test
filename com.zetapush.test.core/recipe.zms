@@ -1,0 +1,43 @@
+/**
+ * ZetaPush Official Test Recipe
+ */
+recipe com.zetapush.test.core 1.0.0;
+
+// Import recipes
+
+// Constants
+
+const SERVICE_MACRO_IMPL_ID = 'macro_1';
+
+const TABLE_TAGS = 'ZetaPushTestTags';
+
+const COLUMN_STORED_OBJECT_VALUE = 'Value';
+const COLUMN_STORED_OBJECT_REVISION = 'Revision';
+const COLUMN_STORED_OBJECT_UPDATE = 'Update';
+
+// Errors Codes
+
+// Services declaration
+
+/**
+ * Public API (Client and Server side) macro service
+ */
+service zpServiceApiMacro = macro(__default) for 'src/public';
+/**
+ * Public API (Client and Server side) macro service
+ */
+service zpServiceImplMacro = macro(SERVICE_MACRO_IMPL_ID).forbiddenVerbs(__all) for 'src/private';
+/**
+ * Data Storage service
+ */
+service zpServiceGda = gda(__default).forbiddenVerbs(__all);
+/**
+ * Event trigger service
+ */
+service zpServiceTrigger = trigger(__default).forbiddenVerbs(__all);
+/**
+ * Messaging service
+ */
+service zpServiceMessaging = messaging(__default).options({
+	messaging_return_channel: 'message'
+});
