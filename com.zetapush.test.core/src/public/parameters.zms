@@ -1,0 +1,95 @@
+const TEST_PARAMETERS_DEFAULT_NUMBER = 42;
+const TEST_PARAMETERS_DEFAULT_PROPERTY = 'property';
+const TEST_PARAMETERS_DEFAULT_MIN = 6;
+const TEST_PARAMETERS_DEFAULT_MAX = 9;
+const TEST_PARAMETERS_DEFAULT_MIDDLE = 7;
+
+macroscript test__parameters(
+	
+) {
+	/** */
+	call test__parameters__default() hardFail;
+	
+	/** */
+	var response_1 = call test__parameters__validation__not__null({
+		not_null_string: TEST_PARAMETERS_DEFAULT_PROPERTY
+	}) hardFail;
+	assert response_1.result.not_null_string == TEST_PARAMETERS_DEFAULT_PROPERTY ERROR_COMPARISON_FAIL 'Expected default property';
+	
+	/** */
+	var response_2 = call test__parameters__validation__not__null();
+	assert coll:size(response_2.errors) == 1 ERROR_COMPARISON_FAIL 'Expected 1 error';
+
+	var response_3 = call test__parameters__validation__min__max({
+		min: TEST_PARAMETERS_DEFAULT_MIN,
+		max: TEST_PARAMETERS_DEFAULT_MAX,
+		middle: TEST_PARAMETERS_DEFAULT_MIDDLE
+	});
+	assert response_3.result.min == TEST_PARAMETERS_DEFAULT_MIN ERROR_COMPARISON_FAIL 'Unexpected min value';
+	assert response_3.result.max == TEST_PARAMETERS_DEFAULT_MAX ERROR_COMPARISON_FAIL 'Unexpected max value';
+	assert response_3.result.middle == TEST_PARAMETERS_DEFAULT_MIDDLE ERROR_COMPARISON_FAIL 'Unexpected middle value';
+
+	/** */
+	var response_4 = call test__parameters__validation__min__max({
+		min: TEST_PARAMETERS_DEFAULT_MIN - TEST_PARAMETERS_DEFAULT_MIN,
+		max: TEST_PARAMETERS_DEFAULT_MAX * TEST_PARAMETERS_DEFAULT_MAX,
+		middle: TEST_PARAMETERS_DEFAULT_MIDDLE * TEST_PARAMETERS_DEFAULT_MIDDLE
+	});
+	assert coll:size(response_4.errors) == 3 ERROR_COMPARISON_FAIL 'Expected 3 errors';
+} return {
+
+} on channel __selfName
+
+macroscript test__parameters__default(
+	number default_number_inline = 0,
+	number default_number_const = TEST_PARAMETERS_DEFAULT_NUMBER,
+	map default_map_inline = { [TEST_PARAMETERS_DEFAULT_PROPERTY]: TEST_PARAMETERS_DEFAULT_NUMBER },
+	array default_array_inline = [{}, TEST_PARAMETERS_DEFAULT_NUMBER, TEST_PARAMETERS_DEFAULT_PROPERTY]
+) {
+	/** */
+	assert default_number_inline == 0 ERROR_COMPARISON_FAIL 'Expected 0';
+
+	/** */
+	assert default_number_const == TEST_PARAMETERS_DEFAULT_NUMBER ERROR_COMPARISON_FAIL 'Unexpected default value';
+	
+	/** */
+	assert default_map_inline[TEST_PARAMETERS_DEFAULT_PROPERTY] == TEST_PARAMETERS_DEFAULT_NUMBER ERROR_COMPARISON_FAIL 'Unexpected default value';
+	
+	/** */
+	assert coll:size(default_array_inline) == 3 ERROR_COMPARISON_FAIL '';
+	assert default_array_inline[1] == TEST_PARAMETERS_DEFAULT_NUMBER ERROR_COMPARISON_FAIL 'Unexpected default value';
+	assert default_array_inline[2] == TEST_PARAMETERS_DEFAULT_PROPERTY ERROR_COMPARISON_FAIL 'Unexpected default value';
+	
+} return {
+
+} on channel __selfName
+
+macroscript test__parameters__validation__not__null(
+	@NotNull string not_null_string
+) {
+	/** */
+	assert not_null_string != null ERROR_COMPARISON_FAIL 'Unexpected default value';
+	
+	
+} return {
+	not_null_string
+} on channel __selfName
+
+
+macroscript test__parameters__validation__min__max(
+	@Min(5) number min,
+	@Max(10) number max,
+	@Min(5) @Max(10) number middle
+) {
+	/** */
+	assert min >= 5 ERROR_COMPARISON_FAIL 'Unexpected min value';
+	
+	/** */
+	assert max <= 10 ERROR_COMPARISON_FAIL 'Unexpected max value';
+
+	/** */
+	assert middle >= 5 ERROR_COMPARISON_FAIL 'Unexpected middle value';
+	assert middle <= 10 ERROR_COMPARISON_FAIL 'Unexpected middle value';
+} return {
+	min, max, middle
+} on channel __selfName
