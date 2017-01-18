@@ -51,7 +51,7 @@ zms_test arithmetic_numeric_string {
 	sudo anonymous call zpRecipeTestCore::test__arithmetic_numeric_string();
 }
 
-zms_test arithmetic_numeric_string {
+zms_test arithmetic_basic_string {
 	import zms_test_setup before;
 	zms_add_handler(anonymous, zpRecipeTestCore::test__arithmetic_basic_string, function (res, err) {
 		info('zpRecipeTestCore::test__arithmetic_basic_string', res, err);
