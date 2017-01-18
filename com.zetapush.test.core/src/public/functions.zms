@@ -1,0 +1,61 @@
+macroscript test__functions(
+) {
+	var object = usr:test__functions__get_empty_object();
+	for item in object {
+		fail ERROR_COMPARISON_FAIL 'Object should be empty'; 	
+	}
+	
+	var closure = usr:test__functions__closure();
+	
+	assert eval:closure() == true ERROR_COMPARISON_FAIL 'Expected true but got ...';
+} return {
+  fn: usr:test__functions__get_empty_object
+} on channel __selfName
+
+macroscript test__functions__dynamic(
+) {
+	var result2 = usr:test__functions__dynamic();
+} return {
+
+} on channel __selfName
+
+macroscript test__functions__closure(
+) {
+
+	var userKey = __userKey;
+
+	var closure0 = () => userKey;
+	assert eval:closure0() == userKey ERROR_COMPARISON_FAIL 'Expected __userKey but got ...';
+
+	var closure1 = () => __userKey;
+	assert eval:closure1() == userKey ERROR_COMPARISON_FAIL 'Expected __userKey but got ...';
+	
+	var closure2 = () => () => __userKey;
+	var closure3 = eval:closure2();
+	assert eval:closure3() == userKey ERROR_COMPARISON_FAIL 'Expected __userKey but got ...';
+	
+	var eval = usr:eval;
+	var identity = (value) => value;
+	var closure4 = eval:eval(identity);
+	assert eval:closure4() == __userKey ERROR_COMPARISON_FAIL 'Expected __userKey but got ...';
+} return {
+
+} on channel __selfName
+
+macroscript test__functions__stackoverflow() {
+	var result1 = usr:test__functions__evaluate(usr:test__functions__evaluate);
+} return {}
+
+macrofunction test__functions__evaluate(function lazy(function lazily())) return eval:lazy(usr:test__functions__evaluate);
+
+macrofunction test__functions__get_empty_object() return {}
+
+macrofunction test__functions__dynamic() {
+	var dynamic = usr:test__functions__dynamic;
+} return eval:dynamic();
+
+macrofunction test__functions__closure() {
+	var closure = () => true;
+} return () -> eval:closure();
+
+macrofunction eval(macrofunction eval(userKey)) return () => eval:eval(__userKey);

@@ -1,0 +1,45 @@
+zms_test_setup before {
+	zms_test_user anonymous = zpRecipeTestCommon::zpServiceWeakAuth({});
+}
+	
+zms_test functions {
+	import zms_test_setup before;
+	zms_add_handler(anonymous, zpRecipeTestCore::test__functions, function (res, err) {
+		info('zpRecipeTestCore::test__functions', res, err);
+		warn('zpRecipeTestCore::test__functions', res.fn=='lambda');
+		zms_test_success;		
+	});
+	sudo anonymous call zpRecipeTestCore::test__functions();
+}
+
+zms_test functions__dynamic {
+	import zms_test_setup before;
+	zms_add_handler(anonymous, zpServiceApiMacro, 'error', function (err) {
+		info('zpRecipeTestCore::test__functions__dynamic', err.code);
+		if (err.code == 'STACK_OVERFLOW') {
+			zms_test_success;	
+		}		
+	});
+	sudo anonymous call zpRecipeTestCore::test__functions__dynamic();
+}
+
+zms_test functions__stackoverflow {
+	import zms_test_setup before;
+	zms_add_handler(anonymous, zpServiceApiMacro, 'error', function (err) {
+		info('zpRecipeTestCore::test__functions__stackoverflow', err.code);
+		if (err.code == 'STACK_OVERFLOW') {
+			zms_test_success;	
+		}		
+	});
+	sudo anonymous call zpRecipeTestCore::test__functions__stackoverflow();
+}
+
+zms_test functions__closure {
+	import zms_test_setup before;
+	zms_add_handler(anonymous, zpRecipeTestCore::test__functions__closure, function (res) {
+		info('zpRecipeTestCore::test__functions__closure', res);
+		zms_test_success;	
+	});
+	sudo anonymous call zpRecipeTestCore::test__functions__closure();
+}
+
