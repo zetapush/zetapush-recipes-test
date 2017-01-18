@@ -1,0 +1,115 @@
+macroscript test__arithmetic_main(
+	
+) {
+	/** Addition */
+	var added = 1 + 1;
+	assert added == 2 ERROR_INVALID_ARITHMETIC 'Expected 2 but got ...';
+	/** Multiplication */
+	var multiplied = added * added;
+	assert multiplied == 4 ERROR_INVALID_ARITHMETIC 'Expected 4 but got ...';
+	/** Pow */
+	var powed = math:pow(multiplied, added);
+	assert powed == 16 ERROR_INVALID_ARITHMETIC 'Expected 8 but got ...';
+	/** Division */
+	var divided = powed / added;
+	assert divided == 8 ERROR_INVALID_ARITHMETIC 'Expected 3 but got ...';
+	/** Comparison */
+	assert '11' == 11 ERROR_INVALID_ARITHMETIC 'Expected \'11\' but got ...';
+	assert 11 == '11' ERROR_INVALID_ARITHMETIC 'Expected 11 but got ...';
+} return {
+
+} on channel __selfName
+
+macroscript test__arithmetic_divide_by_zero(
+	
+) {
+	/** Divide by zero */
+	var infinity = 1 / 0;
+	//assert infinity == 1 ERROR_INVALID_ARITHMETIC 'Expected Infinity but got ...';
+	/** */
+	var nan = infinity / infinity;
+	//assert nan == 1 ERROR_INVALID_ARITHMETIC 'Expected NaN but got ...';
+} return {
+	infinity,
+	nan
+} on channel __selfName
+
+macroscript test__arithmetic_list(
+	
+) {
+	/** List */
+	var infinity = 0 / 0;
+	var nan = infinity / infinity;
+	var list = [];
+	var list_infinity = list + infinity;
+	assert list_infinity[0] == infinity ERROR_INVALID_ARITHMETIC 'Expected `infinity` but got ...';
+	var list_nan = list + nan;
+	assert list_nan[0] == nan ERROR_INVALID_ARITHMETIC 'Expected `nan` but got ...';
+} return {
+
+} on channel __selfName
+
+macroscript test__arithmetic_object(
+	
+) {
+	/** List */
+	var list = [];
+	list = list + "a";
+	assert list[0] == "a" ERROR_INVALID_ARITHMETIC 'Expected a but got ...';
+	/** Map */
+	var map = {};
+	map = map + { a: "a" };
+	// TODO PABLOFIX https://trello.com/c/tEtFpmjk/356-operateur-arithmetique-non-implemente-pour-les-objets-inline
+	//assert map.a == "a" ERROR_INVALID_ARITHMETIC 'Expected a but got ...';
+	map += { b: "b" };
+	assert map.b == "b" ERROR_INVALID_ARITHMETIC 'Expected b but got ...';
+	map += { b: "B" };
+	assert map.b == "B" ERROR_INVALID_ARITHMETIC 'Expected B but got ...';
+	/** */
+	var joined = null + { a: "a" } + { b: "b" };
+	var joined_string = 'a' + null;
+	var joined_map = map + null;
+	var joined_list = list + null;
+	assert joined_list[0] == null ERROR_INVALID_ARITHMETIC 'Expected null but got ...';
+	var joined_null = null + null;
+	assert joined_null == null ERROR_INVALID_ARITHMETIC 'Expected null but got ...';
+	var joined_list_3 = coll:addAll([], [null]);
+	assert joined_list_3[0] == null ERROR_INVALID_ARITHMETIC 'Expected null but got ...';
+} return {
+
+} on channel __selfName
+
+macroscript test__arithmetic_numeric_string(
+	
+) {
+	/** Addition */
+	var added = "1" + "1";
+	assert added == "11" ERROR_INVALID_ARITHMETIC 'Expected 11 but got ...';
+	/** Multiplication */
+	var multiplied = "2" * "2";
+	assert multiplied == 4 ERROR_INVALID_ARITHMETIC 'Expected 4 but got ...';
+	/** Division */
+	var divided = "2" / "2";
+	assert divided == 1 ERROR_INVALID_ARITHMETIC 'Expected 1 but got ...';
+	/** Addition */
+	assert '2' + 4 == '24' ERROR_INVALID_ARITHMETIC 'Expected 24 but got ...';
+	assert 4 + '2' == '6' ERROR_INVALID_ARITHMETIC 'Expected 6 but got ...';
+} return {
+
+} on channel __selfName
+
+macroscript test__arithmetic_basic_string(
+	
+) {
+	/** Addition */
+	var added = "A" + "B";
+	assert added == "AB" ERROR_INVALID_ARITHMETIC 'Expected 11 but got ...';
+	/* Multiplication */
+	//var multiplied = "A" * "B";//EXPRESSION_EVALUATION
+	//assert multiplied == 4 ERROR_INVALID_ARITHMETIC 'Expected 4 but got ...';
+	/** Division */
+	var divided = "A" / "B";
+	//assert divided == 1 ERROR_INVALID_ARITHMETIC 'Expected 1 but got ...';
+} return {
+	added, divided
+} on channel __selfName
