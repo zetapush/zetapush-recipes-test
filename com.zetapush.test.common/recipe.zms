@@ -21,3 +21,14 @@ service zpServiceApiMacro = macro(__default) for 'src/public';
  * Private API (Server side only) macro service
  */
 service zpServiceImplMacro = macro(zpRecipeTestCore::SERVICE_MACRO_IMPL_ID).forbiddenVerbs(__all) for 'src/private';
+/**
+ * Weak Authentification service
+ */
+service zpServiceWeakAuth = weak(__default).forbiddenVerbs(__all);
+/**
+ * Simple Authentification service for Users
+ */
+service zpServiceSimpleAuth = simple(__default).options({
+	simpleauth_mandatoryFields: @config.authentication.simple.mandatory_fields,
+	simpleauth_publicFields: @config.authentication.simple.public_fields
+}).forbiddenVerbs(__all);

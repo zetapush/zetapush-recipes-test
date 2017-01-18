@@ -2,8 +2,9 @@
 <projectDescription>
 	<name>com.zetapush.test</name>
 	<comment></comment>
-  <projects>
+	<projects>
 		<project>com.zetapush.test.common</project>
+		<project>com.zetapush.test.core</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
