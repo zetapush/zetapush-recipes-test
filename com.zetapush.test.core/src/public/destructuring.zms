@@ -1,0 +1,48 @@
+const DEFAULT_DESTRUCTURING_INPUT = 42;
+
+macroscript test__destructuring(
+	
+) {
+	/** Test inline destructuring */
+	var { value } = {
+		value: null
+	};
+	assert value == null ERROR_COMPARISON_FAIL 'Expected null';
+	
+	/** Test macro response destructuring */
+	var { result: { input } } = call test__destructuring__input({
+		input: 42
+	});
+	assert input == 42 ERROR_COMPARISON_FAIL 'Expected 42';
+
+	/** Test macro with default response destructuring */
+	var { result: { default_input } } = call test__destructuring__input__default();
+	assert default_input == DEFAULT_DESTRUCTURING_INPUT ERROR_COMPARISON_FAIL 'Expected default value';
+
+	/** Test function result destructuring */
+	var { not_defined } = usr:test__destructuring__function();
+	assert not_defined == null ERROR_COMPARISON_FAIL 'Expected null';
+
+} return {
+
+} on channel __selfName
+
+macroscript test__destructuring__input(
+	input
+) {
+	
+} return { 
+	input
+} on channel __selfName
+
+macroscript test__destructuring__input__default(
+	default_input = DEFAULT_DESTRUCTURING_INPUT
+) {
+	
+} return { 
+	default_input
+} on channel __selfName
+
+macrofunction test__destructuring__function() return {
+	
+}

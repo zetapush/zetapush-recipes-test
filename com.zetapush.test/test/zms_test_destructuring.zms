@@ -1,0 +1,13 @@
+zms_test destructuring {
+	zms_test_setup {
+		zms_test_user anonymous = zpRecipeTestCommon::zpServiceWeakAuth({});
+	}
+	zms_add_handler(anonymous, zpRecipeTestCore::test__destructuring, function (result, errors) {
+		trace('zpRecipeTestCore::test__destructuring');
+		trace('zpRecipeTestCore::test__destructuring>>result', result);
+		trace('zpRecipeTestCore::test__destructuring>>errors', errors);
+
+		zms_test_success;
+	});
+	sudo anonymous call zpRecipeTestCore::test__destructuring();
+}
