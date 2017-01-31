@@ -1,0 +1,21 @@
+macroscript test__reserved_words_in_body() {
+	var debug = true;
+	var warn = true;
+	var info = true;
+	var log = true;
+	var trace = true;
+} return {
+	debug, warn, info, log, trace
+} on channel __selfName
+
+macroscript test__reserved_words_in_parameters(
+	debug = true,
+	warn = true,
+	info = true,
+	log = true,
+	trace = true	
+) {
+
+} return {
+	debug, warn, info, log, trace
+} on channel __selfName

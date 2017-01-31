@@ -44,7 +44,8 @@ macroscript test__parameters__default(
 	number default_number_inline = 0,
 	number default_number_const = TEST_PARAMETERS_DEFAULT_NUMBER,
 	map default_map_inline = { [TEST_PARAMETERS_DEFAULT_PROPERTY]: TEST_PARAMETERS_DEFAULT_NUMBER },
-	array default_array_inline = [{}, TEST_PARAMETERS_DEFAULT_NUMBER, TEST_PARAMETERS_DEFAULT_PROPERTY]
+	array default_array_inline = [{}, TEST_PARAMETERS_DEFAULT_NUMBER, TEST_PARAMETERS_DEFAULT_PROPERTY],
+	string default_string_properties = @(string)config.default_string
 ) {
 	/** */
 	assert default_number_inline == 0 ERROR_COMPARISON_FAIL 'Expected 0';
