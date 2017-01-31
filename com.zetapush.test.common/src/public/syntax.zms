@@ -35,14 +35,7 @@ macroscript test__reserved_words_in_inline_object() {
 } on channel __selfName
 
 macroscript test__reserved_words_in_destructuring() {
-	var { result: { debug, error, warn, info, log, trace } } call test__reserved_words_in_inline_object();
+	var { result: { debug, error, warn, info, log, trace } } = call test__reserved_words_in_inline_object();
 } return {
 	debug, error, warn, info, log, trace
-} on channel __selfName
-
-macroscript test__reserved_words_in_function() {
-	var warn = () => '';
-	var a = warn();
-} return {
-	a
 } on channel __selfName
