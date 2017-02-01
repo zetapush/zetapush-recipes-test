@@ -13,7 +13,12 @@ zms_test parameters_thumbnails {
 			trace('zpRecipeTestCommon::test__thumbnails_confirm');
 			trace('zpRecipeTestCommon::test__thumbnails_confirm>>result', result);
 			trace('zpRecipeTestCommon::test__thumbnails_confirm>>errors', errors);
-			zms_test_success;	
+		});
+		
+		zms_add_handler(anonymous, zpRecipeTestCommon::zpServiceFileSystem , 'updateMeta', (FileMetaUpdate) => {
+			trace('zpRecipeTestCommon::zpServiceFileSystem::updateMeta', FileMetaUpdate);
+
+			zms_test_success;
 		});
 		
 		sudo anonymous call zpRecipeTestCommon::test__thumbnails_confirm(result);
