@@ -1,27 +1,45 @@
+zms_test_function on_update_meta(updates) {
+	trace('zpRecipeTestCommon::zpServiceFileSystem::updateMeta', updates);
+
+	zms_test_success;
+}
+
+zms_test_function on_new_thumbnail(result, errors, anonymous) {
+	trace('zpRecipeTestCommon::test__thumbnails_new');
+	trace('zpRecipeTestCommon::test__thumbnails_new>>result', result);
+	trace('zpRecipeTestCommon::test__thumbnails_new>>errors', errors);
+	
+	zms_test_http_request(result.url, result.httpMethod, { 'Content-Type' : 'image/png' }, 'test/assets/zetapush-logo.png');
+	
+	zms_add_handler(anonymous, zpRecipeTestCommon::test__thumbnails_confirm, function (result, errors) {
+		trace('zpRecipeTestCommon::test__thumbnails_confirm');
+		trace('zpRecipeTestCommon::test__thumbnails_confirm>>result', result);
+		trace('zpRecipeTestCommon::test__thumbnails_confirm>>errors', errors);
+	});
+	
+	sudo anonymous call zpRecipeTestCommon::test__thumbnails_confirm(result);
+}
+
 zms_test parameters_thumbnails {
 	zms_test_setup {
 		zms_test_user anonymous = zpRecipeTestCommon::zpServiceWeakAuth({});
 	}
-	zms_add_handler(anonymous, zpRecipeTestCommon::test__thumbnails_new, function (result, errors) {
-		trace('zpRecipeTestCommon::test__thumbnails_new');
-		trace('zpRecipeTestCommon::test__thumbnails_new>>result', result);
-		trace('zpRecipeTestCommon::test__thumbnails_new>>errors', errors);
-		
-		zms_test_http_request(result.url, result.httpMethod, { 'Content-Type' : 'image/png' }, 'test/assets/zetapush-logo.png');
-		
-		zms_add_handler(anonymous, zpRecipeTestCommon::test__thumbnails_confirm, function (result, errors) {
-			trace('zpRecipeTestCommon::test__thumbnails_confirm');
-			trace('zpRecipeTestCommon::test__thumbnails_confirm>>result', result);
-			trace('zpRecipeTestCommon::test__thumbnails_confirm>>errors', errors);
-		});
-		
-		zms_add_handler(anonymous, zpRecipeTestCommon::zpServiceFileSystem , 'updateMeta', (FileMetaUpdate) => {
-			trace('zpRecipeTestCommon::zpServiceFileSystem::updateMeta', FileMetaUpdate);
-
-			zms_test_success;
-		});
-		
-		sudo anonymous call zpRecipeTestCommon::test__thumbnails_confirm(result);
-	});
+	zms_add_handler(anonymous, zpRecipeTestCommon::zpServiceFileSystem , 'updateMeta', test:on_update_meta);
+	zms_add_handler(anonymous, zpRecipeTestCommon::test__thumbnails_new, test:on_new_thumbnail);
 	sudo anonymous call zpRecipeTestCommon::test__thumbnails_new();
+}
+
+zms_test parameters_thumbnails_force {
+	zms_test_setup {
+		zms_test_user anonymous = zpRecipeTestCommon::zpServiceWeakAuth({});
+		var size = 100;
+	}
+	zms_add_handler(anonymous, zpRecipeTestCommon::zpServiceFileSystem , 'updateMeta', test:on_update_meta.semaphore(size, 'parameters_thumbnails_force'));
+	zms_add_handler(anonymous, zpRecipeTestCommon::test__thumbnails_new, test:on_new_thumbnail);
+	zms_add_handler(anonymous, echo, (result, errors) => {
+		for i in (1 .. size) {
+			sudo anonymous call zpRecipeTestCommon::test__thumbnails_new();
+		}	
+	});
+	sudo anonymous call echo();
 }
