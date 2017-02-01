@@ -1,0 +1,29 @@
+zms_test parameters_title {
+	zms_test_setup {
+		zms_test_user anonymous = zpRecipeTestCommon::zpServiceWeakAuth({});
+	}
+	zms_add_handler(anonymous, zpRecipeTestCommon::test__template_title, function (result, errors) {
+		trace('zpRecipeTestCommon::test__template_title');
+		trace('zpRecipeTestCommon::test__template_title>>result', result);
+		trace('zpRecipeTestCommon::test__template_title>>errors', errors);
+		
+		zms_test_success;
+	});
+	sudo anonymous call zpRecipeTestCommon::test__template_title();
+}
+
+zms_test parameters_recursion {
+	zms_test_setup {
+		zms_test_user anonymous = zpRecipeTestCommon::zpServiceWeakAuth({});
+	}
+	zms_add_handler(anonymous, zpRecipeTestCommon::test__template_recursion, function (result, errors) {
+		trace('zpRecipeTestCommon::test__template_recursion');
+		trace('zpRecipeTestCommon::test__template_recursion>>result', result);
+		trace('zpRecipeTestCommon::test__template_recursion>>errors', errors);
+		
+		assert errors[0].code == 'CYCLIC_OBJECT' 'INVALID_ERROR_CODE';
+
+		zms_test_success;
+	});
+	sudo anonymous call zpRecipeTestCommon::test__template_recursion();
+}

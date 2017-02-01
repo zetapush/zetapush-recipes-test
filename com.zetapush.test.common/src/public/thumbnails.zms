@@ -1,0 +1,15 @@
+macroscript test__thumbnails_new() {
+	var { guid, httpMethod, url } = zpServiceFileSystem.newUploadUrl({
+		path: '/'
+	});
+} return {
+	guid, httpMethod, url
+} on channel __selfName
+
+macroscript test__thumbnails_confirm(string guid) {
+	var { metadata, name, tags, type, url } = zpServiceFileSystem.newFile({
+		guid
+	});
+} return {
+	metadata, name, tags, type, url
+} on channel __selfName

@@ -1,0 +1,8 @@
+zpServiceTemplate.template_create({
+	name: TEMPLATE_TITLE,
+	file: 'resources/templates/title.ftl'
+});
+zpServiceTemplate.template_create({
+	name: TEMPLATE_RECURSION,
+	file: 'resources/templates/recursion.ftl'
+});

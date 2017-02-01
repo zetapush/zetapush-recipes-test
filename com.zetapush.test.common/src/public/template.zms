@@ -1,0 +1,26 @@
+macroscript test__template_title() {
+	var title = 'title';
+	var expected = '<div>' + title + '</div>';
+	var response = zpServiceTemplate.evaluate({
+		data: {
+			title
+		},
+		name: TEMPLATE_TITLE
+	});
+	assert response.content == expected ERROR_INVALID_TEMPLATE_EVALUATION 'Expected <div>title</div>';
+} return {
+	response
+} on channel __selfName
+
+macroscript test__template_recursion() {
+	var recursion = {};
+	recursion['recursion'] = recursion;
+	var response = zpServiceTemplate.evaluate({
+		data: {
+			recursion
+		},
+		name: TEMPLATE_RECURSION
+	});
+} return {
+	response
+} on channel __selfName
