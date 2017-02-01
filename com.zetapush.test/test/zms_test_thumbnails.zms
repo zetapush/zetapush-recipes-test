@@ -1,4 +1,4 @@
-zms_test parameters_title {
+zms_test parameters_thumbnails {
 	zms_test_setup {
 		zms_test_user anonymous = zpRecipeTestCommon::zpServiceWeakAuth({});
 	}
