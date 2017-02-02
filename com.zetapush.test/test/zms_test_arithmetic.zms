@@ -1,9 +1,5 @@
-zms_test_setup before {
-	zms_test_user anonymous = zpRecipeTestCommon::zpServiceWeakAuth({});
-}
-	
 zms_test arithmetic_main {
-	import zms_test_setup before;
+	import zms_test_setup anonymous_setup;
 	zms_add_handler(anonymous, zpRecipeTestCore::test__arithmetic_main, function (res, err) {
 		info('zpRecipeTestCore::test__arithmetic_main', res, err);
 		zms_test_success;		
@@ -12,7 +8,7 @@ zms_test arithmetic_main {
 }
 
 zms_test arithmetic_divide_by_zero {
-	import zms_test_setup before;
+	import zms_test_setup anonymous_setup;
 	zms_add_handler(anonymous, zpRecipeTestCore::test__arithmetic_divide_by_zero, function (res, err) {
 		info('zpRecipeTestCore::test__arithmetic_divide_by_zero', res);
 		zms_test_success;		
@@ -25,7 +21,7 @@ zms_test arithmetic_divide_by_zero {
 }
 
 zms_test arithmetic_object {
-	import zms_test_setup before;
+	import zms_test_setup anonymous_setup;
 	zms_add_handler(anonymous, zpRecipeTestCore::test__arithmetic_object, function (res, err) {
 		info('zpRecipeTestCore::test__arithmetic_object', res, err);
 		zms_test_success;		
@@ -34,7 +30,7 @@ zms_test arithmetic_object {
 }
 
 zms_test arithmetic_list {
-	import zms_test_setup before;
+	import zms_test_setup anonymous_setup;
 	zms_add_handler(anonymous, zpRecipeTestCore::test__arithmetic_list, function (res, err) {
 		info('zpRecipeTestCore::test__arithmetic_list', res, err);
 		zms_test_success;		
@@ -43,7 +39,7 @@ zms_test arithmetic_list {
 }
 
 zms_test arithmetic_numeric_string {
-	import zms_test_setup before;
+	import zms_test_setup anonymous_setup;
 	zms_add_handler(anonymous, zpRecipeTestCore::test__arithmetic_numeric_string, function (res, err) {
 		info('zpRecipeTestCore::test__arithmetic_numeric_string', res, err);
 		zms_test_success;		
@@ -52,7 +48,7 @@ zms_test arithmetic_numeric_string {
 }
 
 zms_test arithmetic_basic_string {
-	import zms_test_setup before;
+	import zms_test_setup anonymous_setup;
 	zms_add_handler(anonymous, zpRecipeTestCore::test__arithmetic_basic_string, function (res, err) {
 		info('zpRecipeTestCore::test__arithmetic_basic_string', res, err);
 		zms_test_success;		

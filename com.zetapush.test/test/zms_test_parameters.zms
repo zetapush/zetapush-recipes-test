@@ -1,7 +1,5 @@
 zms_test parameters {
-	zms_test_setup {
-		zms_test_user anonymous = zpRecipeTestCommon::zpServiceWeakAuth({});
-	}
+	import zms_test_setup anonymous_setup;
 	zms_add_handler(anonymous, zpRecipeTestCore::test__parameters, function (result, errors) {
 		trace('zpRecipeTestCore::test__parameters');
 		trace('zpRecipeTestCore::test__parameters>>result', result);
