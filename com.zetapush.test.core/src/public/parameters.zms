@@ -35,7 +35,7 @@ macroscript test__parameters(
 		max: TEST_PARAMETERS_DEFAULT_MAX * TEST_PARAMETERS_DEFAULT_MAX,
 		middle: TEST_PARAMETERS_DEFAULT_MIDDLE * TEST_PARAMETERS_DEFAULT_MIDDLE
 	});
-	assert coll:size(response_4.errors) == 3 ERROR_COMPARISON_FAIL 'Expected 3 errors';
+	assert coll:size(response_4.errors) == 1 ERROR_COMPARISON_FAIL 'Expected 1 errors';
 } return {
 
 } on channel __selfName

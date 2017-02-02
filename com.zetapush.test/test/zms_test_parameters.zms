@@ -5,6 +5,8 @@ zms_test parameters {
 		trace('zpRecipeTestCore::test__parameters>>result', result);
 		trace('zpRecipeTestCore::test__parameters>>errors', errors);
 		
+		assert coll:size(errors) == 0 'UNEXPECTED_ERRORS';
+		
 		zms_test_success;
 	});
 	sudo anonymous call zpRecipeTestCore::test__parameters();
