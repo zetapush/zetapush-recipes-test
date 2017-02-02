@@ -16,7 +16,7 @@ zms_test elastic_index_and_get {
 	import zms_test_setup elastic_setup;
 	zms_add_handler(anonymous, zpRecipeTestCommon::test_elastic_index, (result, errors) => {
 		trace('zpRecipeTestCommon::test_elastic_index', result, errors);
-		sudo anonymous call zpRecipeTestCommon::test_elastic_get({ id: id });
+		sudo anonymous call zpRecipeTestCommon::test_elastic_get({ id });
 	});
 	zms_add_handler(anonymous, zpRecipeTestCommon::test_elastic_get, (result, errors) => {
 		trace('zpRecipeTestCommon::test_elastic_get', result, errors);
