@@ -6,3 +6,7 @@ zpServiceTemplate.template_create({
 	name: TEMPLATE_RECURSION,
 	file: 'resources/templates/recursion.ftl'
 });
+zpServiceTemplate.template_create({
+	name: TEMPLATE_MEMORY,
+	file: 'resources/templates/memory.ftl'
+});

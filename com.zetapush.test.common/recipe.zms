@@ -9,6 +9,7 @@ import recipe com.zetapush.test.core 1.0.0 in zpRecipeTestCore;
 
 // Constants
 
+const TEMPLATE_MEMORY = #TEMPLATE_MEMORY;
 const TEMPLATE_TITLE = #TEMPLATE_TITLE;
 const TEMPLATE_RECURSION = #TEMPLATE_RECURSION;
 

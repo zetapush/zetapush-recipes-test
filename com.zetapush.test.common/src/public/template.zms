@@ -24,3 +24,15 @@ macroscript test__template_recursion() {
 } return {
 	response
 } on channel __selfName
+
+macroscript test__template_memory() {
+	var memory = str:join('', coll:map(math:range(1, 500), (a) => str:rnd64(128)));
+	var response = zpServiceTemplate.evaluate({
+		data: {
+			memory
+		},
+		name: TEMPLATE_MEMORY
+	});
+} return {
+	response
+} on channel __selfName
