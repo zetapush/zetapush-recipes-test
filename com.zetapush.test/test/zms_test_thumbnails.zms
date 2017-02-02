@@ -20,7 +20,7 @@ zms_test_function on_new_thumbnail(result, errors, anonymous) {
 	sudo anonymous call zpRecipeTestCommon::test__thumbnails_confirm(result);
 }
 
-zms_test parameters_thumbnails {
+zms_test thumbnails {
 	zms_test_setup {
 		zms_test_user anonymous = zpRecipeTestCommon::zpServiceWeakAuth({});
 	}
@@ -29,7 +29,7 @@ zms_test parameters_thumbnails {
 	sudo anonymous call zpRecipeTestCommon::test__thumbnails_new();
 }
 
-zms_test parameters_thumbnails_force {
+zms_test thumbnails_force {
 	zms_test_setup {
 		zms_test_user anonymous = zpRecipeTestCommon::zpServiceWeakAuth({});
 		var size = 100;

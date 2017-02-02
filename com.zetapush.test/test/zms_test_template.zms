@@ -1,4 +1,4 @@
-zms_test parameters_title {
+zms_test template_title {
 	zms_test_setup {
 		zms_test_user anonymous = zpRecipeTestCommon::zpServiceWeakAuth({});
 	}
@@ -12,7 +12,7 @@ zms_test parameters_title {
 	sudo anonymous call zpRecipeTestCommon::test__template_title();
 }
 
-zms_test parameters_recursion {
+zms_test template_recursion {
 	zms_test_setup {
 		zms_test_user anonymous = zpRecipeTestCommon::zpServiceWeakAuth({});
 	}
@@ -29,7 +29,7 @@ zms_test parameters_recursion {
 }
 
 
-zms_test parameters_memory {
+zms_test template_memory {
 	zms_test_setup {
 		zms_test_user anonymous = zpRecipeTestCommon::zpServiceWeakAuth({});
 	}
