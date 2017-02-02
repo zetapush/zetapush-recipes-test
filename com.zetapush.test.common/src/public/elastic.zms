@@ -1,0 +1,17 @@
+macroscript test_elastic_index(string id) {
+	zpServiceElastic.index({
+		id,
+		index: 'NOT_CREATED_INDEX',
+		type: 'NOT_CREATED_TYPE',
+		data: {}
+	});
+} return { } on channel __selfName
+
+
+macroscript test_elastic_get(string id) {
+	var { data } = zpServiceElastic.get({
+		id,
+		index: 'NOT_CREATED_INDEX',
+		type: 'NOT_CREATED_TYPE'
+	});
+} return { id, data } on channel __selfName

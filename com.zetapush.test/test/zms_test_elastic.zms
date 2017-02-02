@@ -1,0 +1,27 @@
+zms_test_setup elastic_setup {
+	zms_test_user anonymous = zpRecipeTestCommon::zpServiceWeakAuth({});
+	var id = str:rnd36(16);
+}
+
+zms_test elastic_index {
+	import zms_test_setup elastic_setup;
+	zms_add_handler(anonymous, zpRecipeTestCommon::test_elastic_index, (result, errors) => {
+		trace('zpRecipeTestCommon::test_elastic_index', result, errors);
+		zms_test_success;
+	});
+	sudo anonymous call zpRecipeTestCommon::test_elastic_index({ id });
+}
+
+zms_test elastic_index_and_get {
+	import zms_test_setup elastic_setup;
+	zms_add_handler(anonymous, zpRecipeTestCommon::test_elastic_index, (result, errors) => {
+		trace('zpRecipeTestCommon::test_elastic_index', result, errors);
+		sudo anonymous call zpRecipeTestCommon::test_elastic_get({ id: id });
+	});
+	zms_add_handler(anonymous, zpRecipeTestCommon::test_elastic_get, (result, errors) => {
+		trace('zpRecipeTestCommon::test_elastic_get', result, errors);
+		assert result.id == id zpRecipeTestCore::ERROR_COMPARISON_FAIL; 
+		zms_test_success;
+	});
+	sudo anonymous call zpRecipeTestCommon::test_elastic_index({ id });
+}
