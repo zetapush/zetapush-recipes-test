@@ -9,7 +9,7 @@ zms_test_function on_new_thumbnail(result, errors, anonymous) {
 	trace('zpRecipeTestCommon::test__thumbnails_new>>result', result);
 	trace('zpRecipeTestCommon::test__thumbnails_new>>errors', errors);
 	
-	zms_test_http_request(result.url, result.httpMethod, { 'Content-Type' : 'image/png' }, 'test/assets/zetapush-logo.png');
+	zms_test_http_request(result.url, result.httpMethod, { 'Content-Type' : 'image/psd' }, 'test/assets/large-valid-jpg.jpg');
 	
 	zms_add_handler(anonymous, zpRecipeTestCommon::test__thumbnails_confirm, function (result, errors) {
 		trace('zpRecipeTestCommon::test__thumbnails_confirm');
@@ -30,7 +30,7 @@ zms_test thumbnails {
 zms_test thumbnails_force {
 	import zms_test_setup anonymous_setup;
 	zms_test_setup {
-		var size = 1000;
+		var size = 3;
 	}
 	zms_add_handler(anonymous, zpRecipeTestCommon::zpServiceFileSystem , 'updateMeta', test:on_update_meta.semaphore(size, 'parameters_thumbnails_force'));
 	zms_add_handler(anonymous, zpRecipeTestCommon::test__thumbnails_new, test:on_new_thumbnail);
