@@ -9,6 +9,18 @@ macroscript test__destructuring(
 	};
 	assert value == null ERROR_COMPARISON_FAIL 'Expected null';
 	
+	/** Test variable based destructuring */
+	var object = { null_value: null };
+	var { null_value } = object;
+	assert value == null ERROR_COMPARISON_FAIL 'Expected null';
+	
+	/** Test call service based destructuring */
+	var { result: { not_returned_value } } = zpServiceApiMacro.func({
+		parameters : {},
+		name : 'test__destructuring__input'
+	});
+	assert value == null ERROR_COMPARISON_FAIL 'Expected null';
+	
 	/** Test macro response destructuring */
 	var { result: { input } } = call test__destructuring__input({
 		input: 42
@@ -22,7 +34,6 @@ macroscript test__destructuring(
 	/** Test function result destructuring */
 	var { not_defined } = usr:test__destructuring__function();
 	assert not_defined == null ERROR_COMPARISON_FAIL 'Expected null';
-
 } return {
 
 } on channel __selfName
