@@ -27,3 +27,23 @@ zms_test parameters_recursion {
 	});
 	sudo anonymous call zpRecipeTestCommon::test__template_recursion();
 }
+
+
+zms_test parameters_memory {
+	zms_test_setup {
+		zms_test_user anonymous = zpRecipeTestCommon::zpServiceWeakAuth({});
+	}
+	zms_add_handler(anonymous, zpRecipeTestCommon::zpServiceApiMacro, 'error', function (error) {
+		trace('zpRecipeTestCommon::error', error);
+
+		zms_test_success;
+	});
+	zms_add_handler(anonymous, zpRecipeTestCommon::test__template_memory, function (result, errors) {
+		trace('zpRecipeTestCommon::test__template_memory');
+		trace('zpRecipeTestCommon::test__template_memory>>result', result);
+		trace('zpRecipeTestCommon::test__template_memory>>errors', errors);
+
+		zms_test_success;
+	});
+	sudo anonymous call zpRecipeTestCommon::test__template_memory();
+}
