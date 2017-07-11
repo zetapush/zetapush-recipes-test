@@ -1,0 +1,73 @@
+const STACK_ELEMENT_DEFAULT_VALUE = "new";
+const STACK_ELEMENT_UPDATED_VALUE = "updated";
+const STACK_VALUE_ERROR = "stack element value doesn't match expected";
+const STACK_NAME = "TEST_STACK";
+
+/** insert an element into the stack and list all elements */
+macroscript stack_scenario_oneElement() {
+	
+	zpServiceStack.push({stack: STACK_NAME, data: {value: STACK_ELEMENT_DEFAULT_VALUE}});
+	
+	// list
+	var {result: stack} = zpServiceStack.list({stack : STACK_NAME});
+	
+} return { stack } on channel __selfName
+
+
+/** insert an element into the stack, update it and list all elements */
+macroscript stack_scenario_oneElementUpdated() {
+	
+	// insert
+	var result = zpServiceStack.push({stack : STACK_NAME, data : {value: STACK_ELEMENT_DEFAULT_VALUE}});
+	
+	// update
+	zpServiceStack.update({guid : result.guid, stack : STACK_NAME, data : {value: STACK_ELEMENT_UPDATED_VALUE}});
+	
+	// list
+	var {result: stack} = zpServiceStack.list({stack : STACK_NAME});
+	
+} return { stack } on channel __selfName
+
+
+/** insert an element, remove it and list all elements */
+macroscript stack_scenario_oneElementRemoved() {
+	
+	// insert
+	var result = zpServiceStack.push({stack : STACK_NAME, data : {value: STACK_ELEMENT_DEFAULT_VALUE}});
+	
+	// remove
+	zpServiceStack.remove({guids : [result.guid], stack : STACK_NAME});
+	
+	// list
+	var {result: stack} = zpServiceStack.list({stack : STACK_NAME});
+	
+} return { stack } on channel __selfName
+
+/** insert multiple elements, purge and then list */
+macroscript stack_scenario_elementsPurged() {
+	
+	var i = 5;
+	
+	while(i > 0) {
+		i -= 1;
+		zpServiceStack.push({stack: STACK_NAME, data: {value: STACK_ELEMENT_DEFAULT_VALUE}}) loud;
+	}
+	
+	zpServiceStack.purge({stack : STACK_NAME}) loud;
+	
+	// list
+	var {result: stack} = zpServiceStack.list({stack : STACK_NAME});
+	
+	
+} return { stack } on channel __selfName
+
+/** try updating an element non existant, then list */
+macroscript stack_scenario_updateInexistant() {
+	
+	// update
+	zpServiceStack.update({guid : "///+os8fo8QcQgUN5nSeSg==", stack : STACK_NAME, data : {value: STACK_ELEMENT_DEFAULT_VALUE}});
+	
+	// list
+	var {result: stack} = zpServiceStack.list({stack : STACK_NAME});
+	
+} return { stack } on channel __selfName

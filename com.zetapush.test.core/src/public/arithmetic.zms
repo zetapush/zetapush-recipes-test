@@ -20,24 +20,27 @@ macroscript test__arithmetic_main(
 
 } on channel __selfName
 
+
 macroscript test__arithmetic_divide_by_zero(
 	
 ) {
-	/** Divide by zero */
-	var infinity = 1 / 0;
+	
+	// Divide by zero - now blocked by interpreter
+	// var infinity = 1 / 0;
 	//assert infinity == 1 ERROR_INVALID_ARITHMETIC 'Expected Infinity but got ...';
-	/** */
-	var nan = infinity / infinity;
+	// /** */
+	// var nan = infinity / infinity;
 	//assert nan == 1 ERROR_INVALID_ARITHMETIC 'Expected NaN but got ...';
+	
 } return {
-	infinity,
-	nan
+	/*infinity,
+	nan*/
 } on channel __selfName
 
 macroscript test__arithmetic_list(
 	
 ) {
-	/** List */
+	/*
 	var infinity = 0 / 0;
 	var nan = infinity / infinity;
 	var list = [];
@@ -45,6 +48,7 @@ macroscript test__arithmetic_list(
 	assert list_infinity[0] == infinity ERROR_INVALID_ARITHMETIC 'Expected `infinity` but got ...';
 	var list_nan = list + nan;
 	assert list_nan[0] == nan ERROR_INVALID_ARITHMETIC 'Expected `nan` but got ...';
+	*/
 } return {
 
 } on channel __selfName

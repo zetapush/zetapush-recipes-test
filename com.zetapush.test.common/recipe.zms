@@ -52,3 +52,15 @@ service zpServiceFileSystem = zpfs_hdfs(__default).options({
  * Elastic search service
  */
 service zpServiceElastic = search(__default).forbiddenVerbs(__all);
+
+
+/**
+* Data stack service
+*/
+service zpServiceStack = stack(__default).forbiddenVerbs(__all);
+
+
+/**
+* Trigger service
+*/
+service zpServiceTrigger = trigger(__default).forbiddenVerbs(__all);

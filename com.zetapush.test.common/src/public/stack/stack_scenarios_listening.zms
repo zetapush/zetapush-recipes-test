@@ -1,0 +1,22 @@
+/** add a listener, then get listeners */
+macroscript stack_scenario_checkListener(
+	/** the user key of the member listening to the talker */
+	string key
+) {
+	
+	zpServiceStack.setListeners({listeners : [key], stack : STACK_NAME});
+	
+	var {listeners: listeners} = zpServiceStack.getListeners({stack : STACK_NAME});
+	
+} return { listeners } on channel __selfName
+
+
+
+/** remove listeners, then get listeners */
+macroscript stack_scenario_resetListener() {
+	
+	zpServiceStack.setListeners({listeners : [], stack : STACK_NAME});
+	
+	var {listeners: listeners} = zpServiceStack.getListeners({stack : STACK_NAME});
+	
+} return { listeners } on channel __selfName

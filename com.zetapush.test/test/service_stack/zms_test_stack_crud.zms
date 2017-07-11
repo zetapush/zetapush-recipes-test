@@ -1,0 +1,134 @@
+/*
+*	zms_test_stack_crud.zms
+*	Service tested:	STACK
+*	Description: Basic tests verifying the main verbs of the Stack service
+*	Verbs involved: [list, purge, push, remove, update]
+*/
+
+zms_test_setup stack_setup {
+	zms_test_user anonymous = zpRecipeTestCommon::zpServiceWeakAuth({});
+}
+
+zms_test stack_list_emptyStack {
+	import zms_test_setup stack_setup;
+	zms_add_handler(anonymous, zpRecipeTestCommon::test_stack_list, (result, errors) => {
+		trace('zpRecipeTestCommon::test_stack_list', result, errors);
+		
+		assert coll:size(result.content) == 0 "stack is empty";
+		assert coll:size(errors) == 0 "no error raised";
+		zms_test_success;
+	});
+	sudo anonymous call zpRecipeTestCommon::test_stack_list();
+}
+
+
+zms_test stack_push_oneElementStack {
+	import zms_test_setup stack_setup;
+	
+	// on pushing
+	zms_add_handler(anonymous, zpRecipeTestCommon::stack_scenario_oneElement, (result, errors) => {
+		
+		// display
+		trace('zpRecipeTestCommon::stack_scenario_oneElement');
+		trace('zpRecipeTestCommon::stack_scenario_oneElement>>result', result);
+		trace('zpRecipeTestCommon::stack_scenario_oneElement>>errors', errors);
+		
+		var element = list:first(result.stack.content);
+		
+		assert result.stack.total == 1 "stack contains one element";
+		assert element.data.value == zpRecipeTestCommon::STACK_ELEMENT_DEFAULT_VALUE "stack element value doesn't match expected";
+		assert coll:size(errors) == 0 "no error raised";
+		
+		zms_test_success;
+	});
+	
+	sudo anonymous call zpRecipeTestCommon::stack_scenario_oneElement();
+	
+}
+
+zms_test stack_update_oneElementStack {
+	import zms_test_setup stack_setup;
+	
+	// on pushing
+	zms_add_handler(anonymous, zpRecipeTestCommon::stack_scenario_oneElementUpdated, (result, errors) => {
+		
+		// display
+		trace('zpRecipeTestCommon::stack_scenario_oneElementUpdated');
+		trace('zpRecipeTestCommon::stack_scenario_oneElementUpdated>>result', result);
+		trace('zpRecipeTestCommon::stack_scenario_oneElementUpdated>>errors', errors);
+		
+		var element = list:first(result.stack.content);
+		
+		assert result.stack.total == 1 "stack contains one element";
+		assert element.data.value == zpRecipeTestCommon::STACK_ELEMENT_UPDATED_VALUE "stack element value doesn't match expected";
+		assert coll:size(errors) == 0 "no error raised";
+		
+		zms_test_success;
+	});
+	
+	sudo anonymous call zpRecipeTestCommon::stack_scenario_oneElementUpdated();
+	
+}
+
+zms_test stack_remove_oneElementStack {
+	import zms_test_setup stack_setup;
+	
+	// on pushing
+	zms_add_handler(anonymous, zpRecipeTestCommon::stack_scenario_oneElementRemoved, (result, errors) => {
+		
+		// display
+		trace('zpRecipeTestCommon::stack_scenario_oneElementRemoved');
+		trace('zpRecipeTestCommon::stack_scenario_oneElementRemoved>>result', result);
+		trace('zpRecipeTestCommon::stack_scenario_oneElementRemoved>>errors', errors);
+		
+		assert result.stack.total == 0 "stack is empty";
+		assert coll:size(errors) == 0 "no error raised";
+		
+		zms_test_success;
+	});
+	
+	sudo anonymous call zpRecipeTestCommon::stack_scenario_oneElementRemoved();
+	
+}
+
+zms_test stack_purge_elementsStack {
+	import zms_test_setup stack_setup;
+	
+	// once purged
+	zms_add_handler(anonymous, zpRecipeTestCommon::stack_scenario_elementsPurged, (result, errors) => {
+		
+		// display
+		trace('zpRecipeTestCommon::stack_scenario_elementsPurged');
+		trace('zpRecipeTestCommon::stack_scenario_elementsPurged>>result', result);
+		trace('zpRecipeTestCommon::stack_scenario_elementsPurged>>errors', errors);
+		
+		assert result.stack.total == 0 "stack is empty";
+		assert coll:size(errors) == 0 "no error raised";
+		
+		zms_test_success;
+	});
+	
+	sudo anonymous call zpRecipeTestCommon::stack_scenario_elementsPurged();
+	
+}
+
+zms_test stack_update_inexistantElementStack {
+	import zms_test_setup stack_setup;
+	
+	// on pushing
+	zms_add_handler(anonymous, zpRecipeTestCommon::stack_scenario_updateInexistant, (result, errors) => {
+		
+		// display
+		trace('zpRecipeTestCommon::stack_scenario_updateInexistant');
+		trace('zpRecipeTestCommon::stack_scenario_updateInexistant>>result', result);
+		trace('zpRecipeTestCommon::stack_scenario_updateInexistant>>errors', errors);
+		
+		assert result.stack.total == 0 "stack is empty";
+		assert coll:size(errors) == 0 "no error raised";
+		
+		zms_test_success;
+	});
+	
+	sudo anonymous call zpRecipeTestCommon::stack_scenario_updateInexistant();
+	
+}

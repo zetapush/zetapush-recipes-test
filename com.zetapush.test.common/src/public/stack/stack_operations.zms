@@ -1,0 +1,35 @@
+macroscript test_stack_list() {
+	
+	var { result: result } = zpServiceStack.list({
+		stack: STACK_NAME
+	});
+	trace(result);
+} return { result } on channel __selfName
+
+macroscript test_stack_push(string value) {
+	
+	var { guid } = zpServiceStack.push({
+		stack: STACK_NAME,
+		data: {value: value}
+	}) loud;
+	
+} return { /** Needed for accessing the element afterward */ guid } on channel __selfName
+
+macroscript test_stack_remove(string id) {
+	
+	zpServiceStack.remove({
+		stack: STACK_NAME,
+		guids: [id]
+	});
+	
+} return { } on channel __selfName
+
+macroscript test_stack_update(bytearray id, string value) {
+	
+	zpServiceStack.update({
+		data : {value: value},
+		guid: id,
+		stack: STACK_NAME
+	});
+	
+} return { } on channel __selfName

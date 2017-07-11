@@ -1,0 +1,129 @@
+/*
+*	zms_test_stack_listening.zms
+*
+*	Service tested:	STACK
+*	Description: Tests about the listening process related to Stack service
+*	Verbs involved: [list, purge, push, remove, update, getListeners, setListeners]
+*/
+
+zms_test_setup stack_advanced_setup {
+	zms_test_user anonymous_alpha = zpRecipeTestCommon::zpServiceWeakAuth({});
+	zms_test_user anonymous_beta = zpRecipeTestCommon::zpServiceWeakAuth({});
+}
+
+zms_test stack_listen_addListener {
+	
+	import zms_test_setup stack_advanced_setup;
+	
+	zms_add_handler(anonymous_alpha, zpRecipeTestCommon::stack_scenario_checkListener, (result, errors) => {
+		
+		// display
+		trace('zpRecipeTestCommon::stack_scenario_checkListener');
+		trace('zpRecipeTestCommon::stack_scenario_checkListener>>result', result);
+		trace('zpRecipeTestCommon::stack_scenario_checkListener>>errors', errors);
+		
+		var listener = list:first(result.listeners);
+		
+		assert listener == anonymous_beta.userKey "user added successfuly to listeners of the stack";
+		assert coll:size(errors) == 0 "no error raised";
+		info('BETA now listens to stack of ALPHA');
+		zms_test_success;
+	});
+	
+	sudo anonymous_alpha call zpRecipeTestCommon::stack_scenario_checkListener({
+		key: anonymous_beta.userKey
+	});
+}
+
+
+zms_test stack_listen_listenAndModify {
+	
+	import zms_test_setup stack_advanced_setup;
+	
+	// handling when ALPHA allows BETA to listen to him
+	zms_add_handler(anonymous_alpha, zpRecipeTestCommon::stack_scenario_checkListener, (result, errors) => {
+		
+		trace('zpRecipeTestCommon::stack_scenario_checkListener');
+		trace('zpRecipeTestCommon::stack_scenario_checkListener>>result', result);
+		trace('zpRecipeTestCommon::stack_scenario_checkListener>>errors', errors);
+		
+		var listener = list:first(result.listeners);
+		
+		assert listener == anonymous_beta.userKey "user added successfuly to listeners of the stack";
+		assert coll:size(errors) == 0 "no error raised";
+		
+		info('BETA now listens to stack of ALPHA');
+		
+		// once beta listens to alpha's stack, modifying alpha's stack
+		info('Modifying stack of ALPHA...');
+		sudo anonymous_alpha call zpRecipeTestCommon::test_stack_push({value: "ok"});
+		
+	});
+	
+	// handling when BETA hears a modifying operation
+	zms_add_handler(anonymous_beta, zpRecipeTestCommon::zpServiceStack, "push", (result, errors) => {
+		trace('zpRecipeTestCommon::stack_scenario_checkListening');
+		trace('zpRecipeTestCommon::stack_scenario_checkListening>>result', result);
+		trace('zpRecipeTestCommon::stack_scenario_checkListening>>errors', errors);
+		
+		info('the listener BETA has been notified of modifying operation on stack of user ALPHA, as expected');
+		
+		zms_test_success;
+		
+	});
+	
+	// sudo anonymous_alpha call zpRecipeTestCommon::stack_scenario_oneElement();
+	
+	sudo anonymous_alpha call zpRecipeTestCommon::stack_scenario_checkListener({
+		key: anonymous_beta.userKey
+	});
+	
+
+}
+
+
+zms_test stack_listen_unlistenAndModify {
+	
+	import zms_test_setup stack_advanced_setup;
+	
+	// handling when ALPHA allows BETA to listen to him
+	zms_add_handler(anonymous_alpha, zpRecipeTestCommon::stack_scenario_checkListener, (result, errors) => {
+		
+		trace('zpRecipeTestCommon::stack_scenario_checkListener');
+		trace('zpRecipeTestCommon::stack_scenario_checkListener>>result', result);
+		trace('zpRecipeTestCommon::stack_scenario_checkListener>>errors', errors);
+		
+		var listener = list:first(result.listeners);
+		
+		assert listener == anonymous_beta.userKey "user added successfuly to listeners of the stack";
+		assert coll:size(errors) == 0 "no error raised";
+		
+		info('BETA now listens to stack of ALPHA');
+		
+		// once beta listens to alpha's stack, modifying alpha's stack
+		sudo anonymous_alpha call zpRecipeTestCommon::stack_scenario_resetListener();
+		
+	});
+	
+	// handling when ALPHA disallows BETA to listen to him
+	zms_add_handler(anonymous_alpha, zpRecipeTestCommon::stack_scenario_resetListener, (result, errors) => {
+		
+		trace('zpRecipeTestCommon::stack_scenario_resetListener');
+		trace('zpRecipeTestCommon::stack_scenario_resetListener>>result', result);
+		trace('zpRecipeTestCommon::stack_scenario_resetListener>>errors', errors);
+		
+		assert coll:size(result.listeners) == 0 "no more user listening to the stack";
+		assert coll:size(errors) == 0 "no error raised";
+		
+		info('BETA does not listen anymore stack of ALPHA');
+		
+		// modifying stack
+		sudo anonymous_alpha call zpRecipeTestCommon::stack_scenario_elementsPurged();
+		
+		zms_test_success;
+	});
+	
+	sudo anonymous_alpha call zpRecipeTestCommon::stack_scenario_checkListener({
+		key: anonymous_beta.userKey
+	});
+}
