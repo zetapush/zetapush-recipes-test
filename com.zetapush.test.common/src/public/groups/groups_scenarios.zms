@@ -1,0 +1,125 @@
+const GROUPS_DEFAULT_NAME = "niceGroup";
+
+/** create a group and check existence */
+macroscript groups_scenario_checkCreation() {
+	
+	var id = str:rnd36(10);
+	
+	zpServiceGroups.createGroup({group : id, groupName : GROUPS_DEFAULT_NAME});
+	
+	var queried = zpServiceGroups.exists({group : id});
+	
+} return { queried } on channel __selfName
+
+/** create a group, delete it and check existence */
+macroscript groups_scenario_checkDeletion() {
+	
+	var id = str:rnd36(10);
+	
+	zpServiceGroups.createGroup({group : id, groupName : GROUPS_DEFAULT_NAME});
+	
+	zpServiceGroups.delGroup({group : id});
+	
+	var queried = zpServiceGroups.exists({group : id});
+	
+} return { queried } on channel __selfName
+
+/** create a group, add some user to it and then list them */
+macroscript groups_scenario_addUser(string user) {
+	
+	var id = str:rnd36(10);
+	
+	zpServiceGroups.createGroup({group : id, groupName : GROUPS_DEFAULT_NAME});
+	
+	zpServiceGroups.addUser({user : user, group : id});
+	
+	var list = zpServiceGroups.listPresences({group: id});
+	
+} return { list } on channel __selfName
+
+
+/** create a group, add some user to it, remove him and then list them */
+macroscript groups_scenario_delUser(string user) {
+	
+	var id = str:rnd36(10);
+	
+	zpServiceGroups.createGroup({group : id, groupName : GROUPS_DEFAULT_NAME});
+	
+	zpServiceGroups.addUser({user : user, group : id});
+	
+	zpServiceGroups.delUser({user : user, group : id});
+	
+	var list = zpServiceGroups.listPresences({group: id});
+	
+} return { list } on channel __selfName
+
+
+/** create groups and add user to some of them, then list his groups */
+macroscript groups_scenario_checkGroups(string user) {
+	
+	var id = str:rnd36(10);
+	var id1 = id + "1";
+	var id2 = id + "2";
+	var id3 = id + "3";
+	
+	zpServiceGroups.createGroup({group : id1, groupName : GROUPS_DEFAULT_NAME});
+	zpServiceGroups.createGroup({group : id2, groupName : GROUPS_DEFAULT_NAME});
+	zpServiceGroups.createGroup({group : id3, groupName : GROUPS_DEFAULT_NAME});
+	
+	zpServiceGroups.addUser({user : user, group : id2});
+	zpServiceGroups.addUser({user : user, group : id3});
+	
+	
+	var groups = sudo user zpServiceGroups.myGroups({});
+	
+} return { groups } on channel __selfName
+
+
+/** create groups and add user to some of them, then list his groups */
+macroscript groups_scenario_checkMembership(string user) {
+	
+	var id = str:rnd36(10);
+
+	zpServiceGroups.createGroup({group : id, groupName : GROUPS_DEFAULT_NAME});
+	
+	zpServiceGroups.addUser({user : user, group : id});
+	
+	// impersonating the owner of the group (current user)
+	var membership = sudo user zpServiceGroups.memberOf({user : user, hardFail : true, group : id, owner: __userKey});
+	
+} return { membership } on channel __selfName
+
+/** create a group and add multiple users at once */
+macroscript groups_scenario_addMultipleUsers(number nbUsers) {
+	
+	var id = str:rnd36(10);
+
+	zpServiceGroups.createGroup({group : id, groupName : GROUPS_DEFAULT_NAME});
+	
+	var users = [];
+	var i = 0;
+	while (i < nbUsers) {
+		users = list:add(users, str:rnd36(8));
+		i += 1;
+	}
+	
+	zpServiceGroups.addUsers({users : users, group : id});
+	
+	var list = zpServiceGroups.listPresences({group: id});
+	
+} return { list } on channel __selfName
+
+/** NOT WORKING - create a group, add then delete multiple users at once */
+macroscript groups_scenario_delMultipleUsers(string user) {
+	
+	var id = str:rnd36(10);
+
+	zpServiceGroups.createGroup({group : id, groupName : GROUPS_DEFAULT_NAME});
+	
+	zpServiceGroups.addUsers({users : [user], group : id});
+	
+	zpServiceGroups.delUsers({group : id, users: [user]});
+	
+	var list = zpServiceGroups.listPresences({group: id});
+	
+} return { list } on channel __selfName

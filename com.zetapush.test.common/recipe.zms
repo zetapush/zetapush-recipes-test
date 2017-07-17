@@ -61,6 +61,11 @@ service zpServiceStack = stack(__default).forbiddenVerbs(__all);
 
 
 /**
+* Groups management service
+*/
+service zpServiceGroups = groups(__default).forbiddenVerbs(__all);
+
+/**
 * Trigger service
 */
 service zpServiceTrigger = trigger(__default).forbiddenVerbs(__all);

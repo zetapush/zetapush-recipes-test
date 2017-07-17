@@ -1,0 +1,200 @@
+/*
+*	zms_test_groups_crud.zms
+*	Service tested:	GROUPS
+*	Description: Basic tests verifying the main verbs of the Groups service
+*	Verbs involved: [*createGroup, *delGroup, *delUser, delUsers, *addUser, *addUsers, *exists, *listPresences, *myGroups, *memberOf]
+*/
+
+zms_test_setup groups_setup {
+	
+	zms_test_user alpha = zpRecipeTestCommon::zpServiceWeakAuth({});
+	zms_test_user bravo = zpRecipeTestCommon::zpServiceWeakAuth({});
+}
+
+zms_test groups_creation_checkExistence {
+	
+	import zms_test_setup groups_setup;
+	
+	zms_add_handler(alpha, zpRecipeTestCommon::groups_scenario_checkCreation, (result, errors) => {
+		
+		trace('zpRecipeTestCommon::groups_scenario_checkCreation');
+		trace('zpRecipeTestCommon::groups_scenario_checkCreation>>result', result);
+		trace('zpRecipeTestCommon::groups_scenario_checkCreation>>errors', errors);
+		
+		assert result.queried.exists == true "the group exists";
+		assert result.queried.groupName == zpRecipeTestCommon::GROUPS_DEFAULT_NAME "the group name is the one expected";
+		assert coll:size(errors) == 0 "no error raised";
+		
+		zms_test_success;
+	});
+	
+	sudo alpha call zpRecipeTestCommon::groups_scenario_checkCreation();
+	
+}
+
+zms_test groups_deletion_checkExistenceAfterDeletion {
+	
+	import zms_test_setup groups_setup;
+	
+	zms_add_handler(alpha, zpRecipeTestCommon::groups_scenario_checkDeletion, (result, errors) => {
+		
+		trace('zpRecipeTestCommon::groups_scenario_checkDeletion');
+		trace('zpRecipeTestCommon::groups_scenario_checkDeletion>>result', result);
+		trace('zpRecipeTestCommon::groups_scenario_checkDeletion>>errors', errors);
+		
+		
+		assert result.queried.exists == false "the group doesn't exist";
+		assert coll:size(errors) == 0 "no error raised";
+		
+		zms_test_success;
+	});
+	
+	sudo alpha call zpRecipeTestCommon::groups_scenario_checkDeletion();
+	
+}
+
+zms_test groups_creation_addUser {
+	
+	import zms_test_setup groups_setup;
+	
+	zms_add_handler(alpha, zpRecipeTestCommon::groups_scenario_addUser, (result, errors) => {
+		
+		trace('zpRecipeTestCommon::groups_scenario_addUser');
+		trace('zpRecipeTestCommon::groups_scenario_addUser>>result', result);
+		trace('zpRecipeTestCommon::groups_scenario_addUser>>errors', errors);
+		
+		assert coll:size(result.list.presences) == 1 "there is one user in the group";
+		
+		var presence = list:first(result.list.presences);
+		
+		assert presence.user.owner == bravo.userKey "the user has been added to the group";
+		assert coll:size(errors) == 0 "no error raised";
+		
+		zms_test_success;
+		
+	});
+	
+	sudo alpha call zpRecipeTestCommon::groups_scenario_addUser({
+		user: bravo.userKey
+	});
+	
+}
+
+zms_test groups_deletion_deleteUser {
+	
+	import zms_test_setup groups_setup;
+	
+	zms_add_handler(alpha, zpRecipeTestCommon::groups_scenario_delUser, (result, errors) => {
+		
+		trace('zpRecipeTestCommon::groups_scenario_delUser');
+		trace('zpRecipeTestCommon::groups_scenario_delUser>>result', result);
+		trace('zpRecipeTestCommon::groups_scenario_delUser>>errors', errors);
+		
+		assert coll:size(result.list.presences) == 0 "group is empty";
+		assert coll:size(errors) == 0 "no error raised";
+		
+		zms_test_success;
+		
+	});
+	
+	sudo alpha call zpRecipeTestCommon::groups_scenario_delUser({
+		user: bravo.userKey
+	});
+	
+}
+
+zms_test groups_verification_checkMyGroups {
+	
+	import zms_test_setup groups_setup;
+	
+	zms_add_handler(alpha, zpRecipeTestCommon::groups_scenario_checkGroups, (result, errors) => {
+		
+		trace('zpRecipeTestCommon::groups_scenario_checkGroups');
+		trace('zpRecipeTestCommon::groups_scenario_checkGroups>>result', result);
+		trace('zpRecipeTestCommon::groups_scenario_checkGroups>>errors', errors);
+		trace(result.groups);
+		
+		assert coll:size(result.groups) == 2 "user has been added to 2 groups";
+		assert coll:size(errors) == 0 "no error raised";
+		
+		zms_test_success;
+		
+	});
+	
+	sudo alpha call zpRecipeTestCommon::groups_scenario_checkGroups({
+		user: bravo.userKey
+	});
+	
+	
+}
+
+zms_test groups_verification_checkMyMembership {
+	
+	import zms_test_setup groups_setup;
+	
+	zms_add_handler(alpha, zpRecipeTestCommon::groups_scenario_checkMembership, (result, errors) => {
+		
+		trace('zpRecipeTestCommon::groups_scenario_checkMembership');
+		trace('zpRecipeTestCommon::groups_scenario_checkMembership>>result', result);
+		trace('zpRecipeTestCommon::groups_scenario_checkMembership>>errors', errors);
+		
+		assert result.membership.member == true "user is a member of the group";
+		assert coll:size(errors) == 0 "no error raised";
+		
+		zms_test_success;
+		
+	});
+	
+	sudo alpha call zpRecipeTestCommon::groups_scenario_checkMembership({
+		user: bravo.userKey
+	});
+	
+	
+}
+
+zms_test groups_creation_addUsers {
+	
+	import zms_test_setup groups_setup;
+	
+	zms_add_handler(alpha, zpRecipeTestCommon::groups_scenario_addMultipleUsers, (result, errors) => {
+		
+		trace('zpRecipeTestCommon::groups_scenario_addMultipleUsers');
+		trace('zpRecipeTestCommon::groups_scenario_addMultipleUsers>>result', result);
+		trace('zpRecipeTestCommon::groups_scenario_addMultipleUsers>>errors', errors);
+		
+		assert coll:size(result.list.presences) == 3 "there is the expected amount of users in the group";
+		
+		assert coll:size(errors) == 0 "no error raised";
+		
+		zms_test_success;
+		
+	});
+	
+	sudo alpha call zpRecipeTestCommon::groups_scenario_addMultipleUsers({
+		nbUsers: 3
+	});
+}
+
+/*
+zms_test groups_deletion_delUsers {
+	
+	import zms_test_setup groups_setup;
+	
+	zms_add_handler(alpha, zpRecipeTestCommon::groups_scenario_delMultipleUsers, (result, errors) => {
+		
+		trace('zpRecipeTestCommon::groups_scenario_delMultipleUsers');
+		trace('zpRecipeTestCommon::groups_scenario_delMultipleUsers>>result', result);
+		trace('zpRecipeTestCommon::groups_scenario_delMultipleUsers>>errors', errors);
+		
+		assert coll:size(result.list.presences) == 0 "there is no more user in the group";
+		
+		assert coll:size(errors) == 0 "no error raised";
+		
+		zms_test_success;
+		
+	});
+	
+	sudo alpha call zpRecipeTestCommon::groups_scenario_delMultipleUsers({
+		user: bravo.userKey
+	});
+}*/
