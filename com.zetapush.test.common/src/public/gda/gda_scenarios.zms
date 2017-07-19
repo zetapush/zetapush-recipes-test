@@ -1,0 +1,6 @@
+const GDA_DEFAULT_TABLE = "gdaTestTable";
+
+/** create a gda table and list */
+macroscript gda_scenario_checkCreation() {
+	
+} return { } on channel __selfName

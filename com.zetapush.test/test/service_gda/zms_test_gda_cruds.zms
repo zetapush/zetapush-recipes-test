@@ -1,0 +1,13 @@
+/*
+*	zms_test_gda_crud.zms
+*	Service tested:	GENERIC DATA ACCESS
+*	Description: Basic tests verifying the main verbs of the GDA service
+*	Verbs involved: [get, getCells, list, put, puts, removeCell]
+*	(starred verbs are tested and functionnal)
+*/
+
+zms_test_setup gda_setup {
+	
+	zms_test_user alpha = zpRecipeTestCommon::zpServiceWeakAuth({});
+	zms_test_user bravo = zpRecipeTestCommon::zpServiceWeakAuth({});
+}
