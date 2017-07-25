@@ -1,0 +1,23 @@
+macroscript_annotation IsValidUserKey(default string userKey) = @Before(macro = test_validate_user_key, macroParams = {
+	userKey
+});
+
+macroscript test_validate_user_key(
+	@NotNull string userKey
+) {
+	// Validation never failed for test purpose
+}
+
+@IsValidUserKey(userKey)
+macroscript test_is_valid_user_key_with_same_name_parameter(
+	@NotNull string userKey
+) {
+	// Validation never failed for test purpose
+} return {} on channel __selfName
+
+@IsValidUserKey(otherUserKey)
+macroscript test_is_valid_user_key_with_different_name_parameter(
+	@NotNull string otherUserKey
+) {
+	// Validation never failed for test purpose
+} return {} on channel __selfName
