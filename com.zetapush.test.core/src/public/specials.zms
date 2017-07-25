@@ -1,0 +1,17 @@
+macroscript test_specials() {
+	const specials = [
+		'zms://globals',	
+		'zms://routes',	
+		'zms://types'
+	];
+	var responses = [];
+	for name in specials {
+		var response = zpServiceApiMacro.func({
+			parameters: {},
+			name
+		});
+		responses += response;	
+	}
+} return {
+	responses
+} on channel __selfName

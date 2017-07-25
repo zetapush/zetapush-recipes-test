@@ -1,0 +1,9 @@
+zms_test specials_main {
+	import zms_test_setup anonymous_setup;
+	zms_add_handler(anonymous, zpRecipeTestCore::test_specials, (response, errors) => {
+		info('zpRecipeTestCore::test_specials', response, errors);
+		assert coll:size(errors) == 0 'TEST_FAILED';
+		zms_test_success;
+	});
+	sudo anonymous call zpRecipeTestCore::test_specials();
+}
