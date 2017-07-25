@@ -1,4 +1,4 @@
-zms_test annotations_main {
+zms_test annotations_valid_user_key_with_same_name_parameter {
 	import zms_test_setup anonymous_setup;
 	zms_add_handler(anonymous, zpRecipeTestCore::test_is_valid_user_key_with_same_name_parameter, (response, errors) => {
 		info('zpRecipeTestCore::test_is_valid_user_key_with_same_name_parameter', response, errors);
@@ -10,7 +10,7 @@ zms_test annotations_main {
 	});
 }
 
-zms_test annotations_main {
+zms_test annotations_valid_user_key_with_different_name_parameter {
 	import zms_test_setup anonymous_setup;
 	zms_add_handler(anonymous, zpRecipeTestCore::test_is_valid_user_key_with_different_name_parameter, (response, errors) => {
 		info('zpRecipeTestCore::test_is_valid_user_key_with_different_name_parameter', response, errors);
